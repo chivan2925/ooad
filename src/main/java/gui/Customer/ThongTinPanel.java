@@ -154,6 +154,8 @@ public class ThongTinPanel extends JPanel {
         button.setBackground(bgColor);
         button.setForeground(fgColor);
         button.setFocusPainted(false);
+        button.setOpaque(true);
+        button.setBorderPainted(false);
         button.setBorder(new EmptyBorder(10, 25, 10, 25));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return button;
