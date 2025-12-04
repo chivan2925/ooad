@@ -1,6 +1,7 @@
 package gui.Customer;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
@@ -19,6 +20,14 @@ public class ThongTinPanel extends JPanel {
     private JTextField txtDiaChi;
     private MainFrame mainFrame;
     private Connection conn;
+
+    // Cải thiện giao diện
+    private final Color PRIMARY_COLOR = new Color(25, 118, 210);
+    private final Color BACKGROUND_COLOR = new Color(245, 245, 245);
+    private final Color TEXT_COLOR = new Color(33, 33, 33);
+    private final Font LABEL_FONT = new Font("Segoe UI", Font.BOLD, 14);
+    private final Font FIELD_FONT = new Font("Segoe UI", Font.PLAIN, 14);
+
     private UsersDTO currentUser;
     private UsersDAO currentUserDAO = new UsersDAO();
     private IdCurrentUser idcurrentUser;
@@ -29,16 +38,21 @@ public class ThongTinPanel extends JPanel {
         this.currentUser = currentUserDAO.getById(IdCurrentUser.getCurrentUserId(), conn); // Giả định MainFrame có user
         // hiện tại
 
-        setLayout(new BorderLayout(0, 10));
-        setBorder(new EmptyBorder(20, 20, 20, 20));
+        setLayout(new GridBagLayout()); // Sử dụng GridBagLayout để căn giữa
+        setBackground(BACKGROUND_COLOR);
 
         // Panel nhập thông tin
         JPanel panelThongTin = createInfoPanel();
-        add(panelThongTin, BorderLayout.CENTER);
+        panelThongTin.setPreferredSize(new Dimension(500, 350));
+        panelThongTin.setMaximumSize(new Dimension(500, 350));
 
-        // Panel nút bấm
-        JPanel panelButton = createButtonPanel();
-        add(panelButton, BorderLayout.SOUTH);
+        // Thêm panel thông tin vào giữa màn hình
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        add(panelThongTin, gbc);
 
         loadUserInfo(); // Load dữ liệu người dùng hiện tại
     }
@@ -51,49 +65,98 @@ public class ThongTinPanel extends JPanel {
 
     private JPanel createInfoPanel() {
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createTitledBorder("Thông tin cá nhân"));
+        panel.setLayout(new BorderLayout(10, 15));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(220, 220, 220), 1),
+            new EmptyBorder(20, 25, 25, 25)
+        ));
 
-        JPanel personalPanel = new JPanel(new GridLayout(3, 2, 10, 10));
-        personalPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        // Tiêu đề
+        JLabel titleLabel = new JLabel("Thông tin cá nhân", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        titleLabel.setForeground(PRIMARY_COLOR);
+        panel.add(titleLabel, BorderLayout.NORTH);
 
-        personalPanel.add(new JLabel("Họ tên:"));
-        txtHoTen = new JTextField(20);
-        personalPanel.add(txtHoTen);
+        // Form nhập liệu
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        personalPanel.add(new JLabel("Số điện thoại:"));
-        txtSDT = new JTextField();
-        personalPanel.add(txtSDT);
+        // Họ tên
+        gbc.gridx = 0; gbc.gridy = 0; gbc.anchor = GridBagConstraints.WEST;
+        formPanel.add(createLabel("Họ tên:"), gbc);
+        gbc.gridx = 1; gbc.gridy = 0; gbc.weightx = 1.0;
+        txtHoTen = createTextField();
+        formPanel.add(txtHoTen, gbc);
 
-        personalPanel.add(new JLabel("Địa chỉ:"));
-        txtDiaChi = new JTextField();
-        personalPanel.add(txtDiaChi);
+        // Số điện thoại
+        gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 0;
+        formPanel.add(createLabel("Số điện thoại:"), gbc);
+        gbc.gridx = 1; gbc.gridy = 1; gbc.weightx = 1.0;
+        txtSDT = createTextField();
+        formPanel.add(txtSDT, gbc);
 
-        panel.add(personalPanel);
+        // Địa chỉ
+        gbc.gridx = 0; gbc.gridy = 2; gbc.weightx = 0;
+        formPanel.add(createLabel("Địa chỉ:"), gbc);
+        gbc.gridx = 1; gbc.gridy = 2; gbc.weightx = 1.0;
+        txtDiaChi = createTextField();
+        formPanel.add(txtDiaChi, gbc);
+
+        panel.add(formPanel, BorderLayout.CENTER);
+
+        // Panel nút bấm
+        JPanel buttonPanel = createButtonPanel();
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+
         return panel;
     }
 
     private JPanel createButtonPanel() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 5));
+        panel.setOpaque(false);
 
-        JButton btnQuayLai = new JButton("Quay lại giỏ hàng");
-        // btnQuayLai.addActionListener(e ->
-        // mainFrame.cardLayout.show(mainFrame.contentPanel, "GioHang"));
-        btnQuayLai.addActionListener(e -> {
-            mainFrame.cardLayout.show(mainFrame.contentPanel, "GioHang");
-            mainFrame.setGioHangActive(); // tô xanh lại nút giỏ hàng
-        });
-        JButton btnXacNhan = new JButton("Cập nhật thông tin");
+        JButton btnXacNhan = createStyledButton("Cập nhật thông tin", PRIMARY_COLOR, Color.WHITE);
         btnXacNhan.addActionListener(e -> {
             if (validateForm()) {
                 updateUserInfo();
             }
         });
 
-        panel.add(btnQuayLai);
         panel.add(btnXacNhan);
 
         return panel;
+    }
+
+    private JLabel createLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(LABEL_FONT);
+        label.setForeground(TEXT_COLOR);
+        return label;
+    }
+
+    private JTextField createTextField() {
+        JTextField textField = new JTextField(20);
+        textField.setFont(FIELD_FONT);
+        textField.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 200, 200)),
+            new EmptyBorder(8, 10, 8, 10)
+        ));
+        return textField;
+    }
+
+    private JButton createStyledButton(String text, Color bgColor, Color fgColor) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        button.setBackground(bgColor);
+        button.setForeground(fgColor);
+        button.setFocusPainted(false);
+        button.setBorder(new EmptyBorder(10, 25, 10, 25));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return button;
     }
 
     private boolean validateForm() {

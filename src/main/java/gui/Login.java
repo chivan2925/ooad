@@ -5,10 +5,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
+import javax.swing.border.AbstractBorder;
 import javax.swing.border.*;
 
 import gui.Component.Dialog.AlertDialog;
 import gui.Controller.Controller;
+import gui.Component.Panel.RoundedPanel;
 
 // import com.itextpdf.styledxmlparser.jsoup.select.Evaluator.Id;
 
@@ -39,16 +41,17 @@ public class Login extends JFrame {
     private JTextField DCField;
     private JTextField SDTField;
 
-    private Color primaryColor = new Color(33, 33, 33);
-    private Color accentColor = new Color(0, 123, 255);
-    private Color textColor = Color.WHITE;
-    private Font mainFont = new Font("Segoe UI", Font.PLAIN, 14);
-    private Font titleFont = new Font("Segoe UI", Font.BOLD, 24);
+    private Color primaryColor = new Color(34, 40, 49); // Dark Slate Gray
+    private Color accentColor = new Color(52, 152, 219); // Modern Blue
+    private Color textColor = new Color(238, 238, 238); // Off-white
+    private Color fieldBgColor = new Color(57, 62, 70);
+    private Color fieldBorderColor = new Color(80, 80, 80);
 
     public Login() {
         applyDarkTheme();
         setTitle("MOTORCYCLE SHOP");
-        setSize(450, 700);
+        // setSize(450, 700); // Thay đổi để hiển thị toàn màn hình
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Đặt cửa sổ ở chế độ toàn màn hình
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -56,11 +59,22 @@ public class Login extends JFrame {
         // ImageIcon icon = new
         // ImageIcon(getClass().getResource("/images/motorcycle_icon.png"));
         // setIconImage(icon.getImage());
-
+        
+        // Panel nền trắng toàn màn hình
+        JPanel backgroundPanel = new JPanel(new GridBagLayout());
+        backgroundPanel.setBackground(new Color(245, 245, 245)); // Light gray background
+        
         // Main panel with CardLayout
         cardLayout = new CardLayout();
-        mainPanel = new JPanel(cardLayout);
-        mainPanel.setBackground(primaryColor);
+        mainPanel = new RoundedPanel(cardLayout, 30, primaryColor); // Bo góc với bán kính 30
+        mainPanel.setOpaque(false);
+        mainPanel.setPreferredSize(new Dimension(450, 700)); // Giữ kích thước của khung đăng nhập
+        
+        // Thêm hiệu ứng đổ bóng tinh tế
+        mainPanel.setBorder(BorderFactory.createCompoundBorder(
+            new DropShadowBorder(Color.BLACK, 10, 0.2f, 15, true, true, true, true),
+            BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
 
         // Create panels
         createLoginPanel();
@@ -73,31 +87,34 @@ public class Login extends JFrame {
         // Show login panel first
         cardLayout.show(mainPanel, "login");
 
-        // Add to frame
-        add(mainPanel);
+        // Thêm khung đăng nhập vào giữa panel nền trắng
+        backgroundPanel.add(mainPanel, new GridBagConstraints());
+        
+        // Thêm panel nền vào frame
+        add(backgroundPanel);
 
         setVisible(true);
     }
 
     private void applyDarkTheme() {
         // Áp dụng chủ đề tối chỉ cho các thành phần trong form này
-        UIManager.put("OptionPane.background", new Color(33, 33, 33));
-        UIManager.put("Panel.background", new Color(33, 33, 33));
+        UIManager.put("OptionPane.background", primaryColor);
+        UIManager.put("Panel.background", primaryColor);
         UIManager.put("OptionPane.messageForeground", Color.WHITE);
-        UIManager.put("Button.background", new Color(0, 123, 255));
+        UIManager.put("Button.background", accentColor);
         UIManager.put("Button.foreground", Color.WHITE);
     }
     
     private void createLoginPanel() {
         loginPanel = new JPanel();
         loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
-        loginPanel.setBackground(primaryColor);
+        loginPanel.setOpaque(false); // Làm cho panel trong suốt để thấy bo góc
         loginPanel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
 
         // Logo and title
         JLabel logoLabel = createLogoLabel();
         JLabel titleLabel = new JLabel("MOTORCYCLE SHOP");
-        titleLabel.setFont(titleFont);
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         titleLabel.setForeground(textColor);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -109,19 +126,19 @@ public class Login extends JFrame {
         // Form panel
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
-        formPanel.setBackground(primaryColor);
+        formPanel.setOpaque(false);
         formPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
         // Username field with center-aligned label
         JLabel usernameLabel = new JLabel("Tên đăng nhập");
-        usernameLabel.setFont(mainFont);
+        usernameLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         usernameLabel.setForeground(textColor);
         usernameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         usernameField = createTextField();
 
         // Password field with center-aligned label
         JLabel passwordLabel = new JLabel("Mật khẩu");
-        passwordLabel.setFont(mainFont);
+        passwordLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         passwordLabel.setForeground(textColor);
         passwordLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         passwordField = createPasswordField();
@@ -130,7 +147,7 @@ public class Login extends JFrame {
         loginButton.addActionListener(e -> handleLogin());
 
         JPanel registerLinkPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        registerLinkPanel.setBackground(primaryColor);
+        registerLinkPanel.setOpaque(false);
         JLabel registerPrompt = new JLabel("Chưa có tài khoản? ");
         registerPrompt.setForeground(textColor);
         JLabel registerLink = new JLabel("Đăng ký ngay");
@@ -170,15 +187,15 @@ public class Login extends JFrame {
         formPanel.add(Box.createRigidArea(new Dimension(0, 25)));
 
         adminCheckBox = new JCheckBox("Đăng nhập với tư cách Admin");
-        adminCheckBox.setFont(mainFont);
+        adminCheckBox.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         adminCheckBox.setForeground(textColor);
-        adminCheckBox.setBackground(primaryColor);
+        adminCheckBox.setOpaque(false);
         adminCheckBox.setAlignmentX(Component.CENTER_ALIGNMENT);
         formPanel.add(adminCheckBox);
         formPanel.add(Box.createRigidArea(new Dimension(0, 15)));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.setBackground(primaryColor);
+        buttonPanel.setOpaque(false);
         buttonPanel.add(loginButton);
         formPanel.add(buttonPanel);
         formPanel.add(Box.createRigidArea(new Dimension(0, 20)));
@@ -197,65 +214,64 @@ public class Login extends JFrame {
     private void createRegisterPanel() {
         registerPanel = new JPanel();
         registerPanel.setLayout(new BoxLayout(registerPanel, BoxLayout.Y_AXIS));
-        registerPanel.setBackground(primaryColor);
+        registerPanel.setOpaque(false); // Làm cho panel trong suốt
         registerPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
         // Logo and title
         JLabel logoLabel = createLogoLabel();
         JLabel titleLabel = new JLabel("ĐĂNG KÝ TÀI KHOẢN");
-        titleLabel.setFont(titleFont);
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         titleLabel.setForeground(textColor);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Form panel
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
-        formPanel.setBackground(primaryColor);
+        formPanel.setOpaque(false);
         formPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
 
         // All labels center-aligned
         JLabel fullNameLabel = new JLabel("Họ và tên");
-        fullNameLabel.setFont(mainFont);
+        fullNameLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         fullNameLabel.setForeground(textColor);
         fullNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         fullNameField = createTextField();
         JLabel SDTLabel = new JLabel("Số Điện Thoại");
-        SDTLabel.setFont(mainFont);
+        SDTLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         SDTLabel.setForeground(textColor);
         SDTLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         SDTField = createTextField();
 
         JLabel DCLabel = new JLabel("Địa chỉ");
-        DCLabel.setFont(mainFont);
+        DCLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         DCLabel.setForeground(textColor);
         DCLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         DCField = createTextField();
 
         JLabel regUsernameLabel = new JLabel("Tên đăng nhập");
-        regUsernameLabel.setFont(mainFont);
+        regUsernameLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         regUsernameLabel.setForeground(textColor);
         regUsernameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         regUsernameField = createTextField();
 
         JLabel regPasswordLabel = new JLabel("Mật khẩu");
-        regPasswordLabel.setFont(mainFont);
+        regPasswordLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         regPasswordLabel.setForeground(textColor);
         regPasswordLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         regPasswordField = createPasswordField();
 
         JLabel confirmPasswordLabel = new JLabel("Xác nhận mật khẩu");
-        confirmPasswordLabel.setFont(mainFont);
+        confirmPasswordLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         confirmPasswordLabel.setForeground(textColor);
         confirmPasswordLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         confirmPasswordField = createPasswordField();
 
         JButton registerButton = createButton("Đăng ký");
         registerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         registerButton.addActionListener(e -> attemptRegister());
 
         JPanel loginLinkPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        loginLinkPanel.setBackground(primaryColor);
+        loginLinkPanel.setOpaque(false);
         JLabel loginPrompt = new JLabel("Đã có tài khoản? ");
         loginPrompt.setForeground(textColor);
         JLabel loginLink = new JLabel("Đăng nhập");
@@ -358,32 +374,45 @@ public class Login extends JFrame {
 
     private JTextField createTextField() {
         JTextField field = new JTextField();
-        field.setFont(mainFont);
+        field.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         field.setPreferredSize(new Dimension(300, 35));
         field.setMaximumSize(new Dimension(5000, 35));
         field.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(new Color(100, 100, 100), 1),
+                new LineBorder(fieldBorderColor, 1, true),
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        field.setBackground(new Color(45, 45, 45));
+        field.setBackground(fieldBgColor);
         field.setForeground(textColor);
         field.setCaretColor(textColor);
-
+        field.addFocusListener(createFocusListener(field));
         return field;
     }
 
     private JPasswordField createPasswordField() {
         JPasswordField field = new JPasswordField();
-        field.setFont(mainFont);
+        field.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         field.setPreferredSize(new Dimension(300, 35));
         field.setMaximumSize(new Dimension(5000, 35));
         field.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(new Color(100, 100, 100), 1),
+                new LineBorder(fieldBorderColor, 1, true),
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        field.setBackground(new Color(45, 45, 45));
+        field.setBackground(fieldBgColor);
         field.setForeground(textColor);
         field.setCaretColor(textColor);
-
+        field.addFocusListener(createFocusListener(field));
         return field;
+    }
+
+    private FocusListener createFocusListener(JComponent component) {
+        return new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                component.setBorder(BorderFactory.createCompoundBorder(new LineBorder(accentColor, 1, true), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                component.setBorder(BorderFactory.createCompoundBorder(new LineBorder(fieldBorderColor, 1, true), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+            }
+        };
     }
 
     private JButton createButton(String text) {
@@ -397,6 +426,17 @@ public class Login extends JFrame {
         button.setPreferredSize(new Dimension(150, 40));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+        // Hiệu ứng hover
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(accentColor.darker());
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(accentColor);
+            }
+        });
+
         return button;
     }
 
@@ -406,11 +446,7 @@ public class Login extends JFrame {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Vui lòng nhập đầy đủ thông tin đăng nhập!",
-                    "Lỗi đăng nhập",
-                    JOptionPane.ERROR_MESSAGE);
+        if (username.isEmpty() || password.isEmpty()) {            showStyledErrorDialog("Vui lòng nhập đầy đủ thông tin đăng nhập!", "Lỗi đăng nhập");
             return;
         }
 
@@ -478,13 +514,25 @@ public class Login extends JFrame {
                 new TrangChu();
                
                 this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        "Tên đăng nhập hoặc mật khẩu không đúng!",
-                        "Lỗi đăng nhập",
-                        JOptionPane.ERROR_MESSAGE);
+            } else {                showStyledErrorDialog("Tên đăng nhập hoặc mật khẩu không đúng!", "Lỗi đăng nhập");
             }
         }
+    }
+
+    private void showStyledErrorDialog(String message, String title) {
+        // Áp dụng theme cho JOptionPane
+        UIManager.put("OptionPane.background", primaryColor);
+        UIManager.put("Panel.background", primaryColor);
+        UIManager.put("OptionPane.messageForeground", textColor);
+        UIManager.put("Button.background", accentColor);
+        UIManager.put("Button.foreground", Color.WHITE);
+
+        JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+
+        // Reset lại để không ảnh hưởng đến các dialog khác trong hệ thống
+        UIManager.put("OptionPane.background", null);
+        UIManager.put("Panel.background", null);
+        UIManager.put("OptionPane.messageForeground", null);
     }
 
     private boolean checkCustomerLogin(String username, String password) {
@@ -569,6 +617,64 @@ private void resetRegisterForm() {
     regPasswordField.setText("");
     confirmPasswordField.setText("");
 }
+
+    /**
+     * A border that paints a drop shadow around the component.
+     */
+    class DropShadowBorder extends AbstractBorder {
+        private static final long serialVersionUID = 1L;
+        private int shadowSize;
+        private Color shadowColor;
+        private float shadowOpacity;
+        private int cornerSize;
+        private boolean top, left, bottom, right;
+
+        public DropShadowBorder(Color shadowColor, int shadowSize, float shadowOpacity, int cornerSize, boolean top, boolean left, boolean bottom, boolean right) {
+            this.shadowColor = shadowColor;
+            this.shadowSize = shadowSize;
+            this.shadowOpacity = shadowOpacity;
+            this.cornerSize = cornerSize;
+            this.top = top;
+            this.left = left;
+            this.bottom = bottom;
+            this.right = right;
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            int shadowOffset = shadowSize / 2;
+
+            for (int i = 0; i < shadowSize; i++) {
+                float alpha = shadowOpacity * (1.0f - (float) i / shadowSize);
+                g2d.setColor(new Color(shadowColor.getRed(), shadowColor.getGreen(), shadowColor.getBlue(), (int) (alpha * 255)));
+
+                int arc = cornerSize + i;
+
+                // Điều chỉnh vị trí vẽ bóng dựa trên các cờ top, left, bottom, right
+                int shadowX = x + shadowOffset - (left ? i : -i);
+                int shadowY = y + shadowOffset - (top ? i : -i);
+                int shadowWidth = width - shadowOffset * 2 + (left ? i : -i) + (right ? i : -i);
+                int shadowHeight = height - shadowOffset * 2 + (top ? i : -i) + (bottom ? i : -i);
+
+                g2d.drawRoundRect(shadowX, shadowY, shadowWidth, shadowHeight, arc, arc);
+            }
+
+            g2d.dispose();
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            return new Insets(top ? shadowSize : 0, left ? shadowSize : 0, bottom ? shadowSize : 0, right ? shadowSize : 0);
+        }
+
+        @Override
+        public boolean isBorderOpaque() {
+            return false;
+        }
+    }
 
     // private void openAdminPanel() {
     // // In a real application, open your admin panel here

@@ -380,11 +380,34 @@ public class Admin {
 		});
 
 		btnDangXuat.addActionListener(e -> {
+			// Lưu lại các giá trị UI mặc định
+			Object oldOptionPaneBg = UIManager.get("OptionPane.background");
+			Object oldPanelBg = UIManager.get("Panel.background");
+			Object oldMsgFg = UIManager.get("OptionPane.messageForeground");
+			Object oldBtnBg = UIManager.get("Button.background");
+			Object oldBtnFg = UIManager.get("Button.foreground");
+
+			// Áp dụng theme tối cho dialog đăng xuất
+			Color primaryColor = new Color(34, 40, 49);
+			Color accentColor = new Color(52, 152, 219);
+			UIManager.put("OptionPane.background", primaryColor);
+			UIManager.put("Panel.background", primaryColor);
+			UIManager.put("OptionPane.messageForeground", Color.WHITE);
+			UIManager.put("Button.background", accentColor);
+			UIManager.put("Button.foreground", Color.WHITE);
+
 			int choice = javax.swing.JOptionPane.showConfirmDialog(
 					frame,
 					"Bạn có chắc chắn muốn đăng xuất không?",
 					"Xác nhận đăng xuất",
 					javax.swing.JOptionPane.YES_NO_OPTION);
+
+			// Khôi phục lại các giá trị UI mặc định
+			UIManager.put("OptionPane.background", oldOptionPaneBg);
+			UIManager.put("Panel.background", oldPanelBg);
+			UIManager.put("OptionPane.messageForeground", oldMsgFg);
+			UIManager.put("Button.background", oldBtnBg);
+			UIManager.put("Button.foreground", oldBtnFg);
 
 			if (choice == javax.swing.JOptionPane.YES_OPTION) {
 				frame.dispose(); // Đóng cửa sổ hiện tại
