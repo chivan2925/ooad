@@ -14,7 +14,7 @@ public class Database {
 
       try {
          Class.forName("com.mysql.cj.jdbc.Driver");
-         String var1 = "jdbc:mysql://localhost:3307/qlchxm";
+         String var1 = "jdbc:mysql://localhost:3306/qlchxm";
          String var2 = "root";
          String var3 = "";
          var0 = DriverManager.getConnection(var1, var2, var3);

@@ -21,7 +21,7 @@ public class KhachHangDAO {
         try {
             conn = Database.getConnection();
             // LỌC DỮ LIỆU: Chỉ lấy khách hàng đang Hoạt động
-            String sql = "SELECT * FROM KHACHHANG WHERE TRANGTHAI = 'Hoạt động'"; 
+            String sql = "SELECT * FROM KHACHHANG WHERE TRANGTHAI = 'Đang hoạt động'"; 
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
 
@@ -60,7 +60,7 @@ public class KhachHangDAO {
     public void add(KhachHangDTO kh) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        final String TRANGTHAI_MACDINH = "Hoạt động"; 
+        final String TRANGTHAI_MACDINH = "Đang hoạt động"; 
 
         try {
             conn = Database.getConnection();
@@ -101,7 +101,8 @@ public class KhachHangDAO {
      * Logic: Đếm tổng số khách hàng hiện có trong DB (Count(*)) và tạo mã tiếp theo.
      * @return Mã khách hàng mới dưới dạng chuỗi (KHXXX).
      */
-    public String generateNextMaKH() {
+    public String generateNextMaKH() 
+    {
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -110,30 +111,28 @@ public class KhachHangDAO {
 
         try {
             conn = Database.getConnection();
-            // Lấy mã khách hàng lớn nhất để đảm bảo mã mới là duy nhất và tăng dần.
-            // Ví dụ: Lấy mã KH lớn nhất, cắt phần số và tăng lên 1.
-            String sql = "SELECT MAKH FROM KHACHHANG ORDER BY MAKH DESC LIMIT 1";
+            String sql = "SELECT MAKH FROM KHACHHANG WHERE MAKH LIKE 'KH%'"; // chỉ lấy mã dạng KHxxx
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
 
-            if (rs.next()) {
-                String lastId = rs.getString("MAKH"); // Ví dụ: "KH015"
-                // Cắt bỏ tiền tố "KH" và chuyển phần số sang int.
-                int number = Integer.parseInt(lastId.substring(PREFIX.length())); // Lấy 15
-                int nextNumber = number + 1; // 16
-                // Định dạng lại thành "KH016" (với 3 chữ số đệm)
-                newId = String.format(PREFIX + "%03d", nextNumber);
-            } else {
-                // Nếu chưa có khách hàng nào, bắt đầu từ 1: KH001
-                newId = PREFIX + "001";
+            int maxNumber = 0;
+            while (rs.next()) {
+                String makh = rs.getString("MAKH");
+                try {
+                    int number = Integer.parseInt(makh.substring(PREFIX.length()));
+                    if (number > maxNumber) {
+                        maxNumber = number;
+                    }
+                } catch (NumberFormatException e) {
+                    // bỏ qua các mã không đúng định dạng
+                }
             }
+
+            int nextNumber = maxNumber + 1;
+            newId = String.format(PREFIX + "%03d", nextNumber); // VD: KH001, KH005, ...
         } catch (SQLException e) {
             Logger.getLogger(KhachHangDAO.class.getName()).log(Level.SEVERE, "Lỗi tạo mã khách hàng tự động: ", e);
-            // Trường hợp lỗi, trả về KH001 (hoặc một mã mặc định để tránh lỗi NULL)
-            newId = PREFIX + "001"; 
-        } catch (NumberFormatException e) {
-             Logger.getLogger(KhachHangDAO.class.getName()).log(Level.SEVERE, "Lỗi định dạng số khi tạo mã KH: ", e);
-             newId = PREFIX + "001";
+            newId = PREFIX + "001";
         } finally {
             try {
                 if (rs != null) rs.close();
@@ -143,8 +142,10 @@ public class KhachHangDAO {
                 e.printStackTrace();
             }
         }
+
         return newId;
     }
+
 
 
 

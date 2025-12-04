@@ -1,5 +1,7 @@
 package dto.Statistics;
 
+import java.time.LocalDate;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +13,14 @@ public class PenaltyTimeData {
     private int penaltyReaderQuantity;
     private int lostBookQuantity;
     private Long penaltyFee;
+    public Long getPenaltyFee() {
+        return penaltyFee;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
 
     public PenaltyTimeData(int time, int penaltySheetQuantity, int penaltyReaderQuantity, int lostBookQuantity, Long penaltyFee) {
         this.time = time;
