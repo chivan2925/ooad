@@ -14,20 +14,20 @@ import java.util.Vector;
 
 public class NhanVienTable extends JPanel {
     private DefaultTableModel tblmodel;
-    private JTable table;   
+    private JTable table;
     private JScrollPane scrollPane;
     private List<NhanVienDTO> employees;
 
     public NhanVienTable() {
         setLayout(new BorderLayout());
         initTable();
-        loadData(NhanVienBUS.getInstance().getList()); 
+        loadData(NhanVienBUS.getInstance().getList());
         add(scrollPane, BorderLayout.CENTER);
     }
 
     private void initTable() {
-        String[] columns = {"Mã nhân viên", "Họ tên", "Ngày sinh", "Giới tính", "SĐT",
-                "Địa chỉ", "Chức vụ", "Tên đăng nhập", "Mật khẩu", "Quyền"};
+        String[] columns = { "Mã nhân viên", "Họ tên", "Ngày sinh", "Giới tính", "SĐT",
+                "Địa chỉ", "Chức vụ", "Tên đăng nhập", "Mật khẩu", "Quyền" };
         tblmodel = new DefaultTableModel(columns, 0);
         table = new JTable(tblmodel);
 
@@ -67,7 +67,7 @@ public class NhanVienTable extends JPanel {
     public void loadData(List<NhanVienDTO> list) {
         tblmodel.setRowCount(0);
         if (list != null) {
-             this.employees = new ArrayList<>(list);
+            this.employees = new ArrayList<>(list);
             for (NhanVienDTO nv : list) {
                 Vector<String> row = new Vector<>();
                 row.add(nv.getManv());

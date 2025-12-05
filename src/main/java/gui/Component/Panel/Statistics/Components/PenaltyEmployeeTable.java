@@ -11,31 +11,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PenaltyEmployeeTable extends JTableCustom {
-    private final static String[] tblHeader = {"Nhân viên", "Quý 1", "Quý 2", "Quý 3", "Quý 4", "Tổng cộng"};
+    private final static String[] tblHeader = { "Nhân viên", "Quý 1", "Quý 2", "Quý 3", "Quý 4", "Tổng cộng" };
     private DefaultTableModel tableModel;
     private NhanVienBUS nhanVienBUS;
     private List<StatisticsPreciousData<Long>> employeeList;
 
-    public PenaltyEmployeeTable(){
+    public PenaltyEmployeeTable() {
         super(new DefaultTableModel(tblHeader, 0));
         this.tableModel = (DefaultTableModel) getModel();
         employeeList = new ArrayList<>();
-       nhanVienBUS = new NhanVienBUS();
+        nhanVienBUS = new NhanVienBUS();
     }
 
-    public void setList(List<StatisticsPreciousData<Long>> list){
+    public void setList(List<StatisticsPreciousData<Long>> list) {
         this.employeeList = list;
     }
 
-    public void renderPenaltySheetTable(){
-        if(employeeList == null) return;
+    public void renderPenaltySheetTable() {
+        if (employeeList == null)
+            return;
 
         tableModel.setRowCount(0);
-        Long totalQ1 = 0L; Long totalQ2 = 0L; Long totalQ3 = 0L; Long totalQ4 = 0L; Long totalAll = 0L;
-        for(StatisticsPreciousData<Long> data : employeeList){
-            NhanVienDTO nhanVienDTO =nhanVienBUS.getNhanVienById(data.getId());
+        Long totalQ1 = 0L;
+        Long totalQ2 = 0L;
+        Long totalQ3 = 0L;
+        Long totalQ4 = 0L;
+        Long totalAll = 0L;
+        for (StatisticsPreciousData<Long> data : employeeList) {
+            NhanVienDTO nhanVienDTO = nhanVienBUS.getNhanVienById(data.getId());
+            String hoten = nhanVienDTO != null ? nhanVienDTO.getHoten() : "Không xác định";
             Object[] rowData = {
-                    nhanVienDTO.getHoten(),
+                    hoten,
                     data.getCountQ1(),
                     data.getCountQ2(),
                     data.getCountQ3(),
@@ -55,13 +61,18 @@ public class PenaltyEmployeeTable extends JTableCustom {
         tableModel.addRow(totalData);
     }
 
-    public void renderPenaltyFeeTable(){
-        if(employeeList == null) return;
+    public void renderPenaltyFeeTable() {
+        if (employeeList == null)
+            return;
 
         tableModel.setRowCount(0);
-        Long sumTotalQ1 = 0L; Long sumTotalQ2 = 0L; Long sumTotalQ3 = 0L; Long sumTotalQ4 = 0L; Long sumTotalAll = 0L;
-        for(StatisticsPreciousData<Long> data : employeeList){
-            NhanVienDTO nhanVienDTO =nhanVienBUS.getNhanVienById(data.getId());
+        Long sumTotalQ1 = 0L;
+        Long sumTotalQ2 = 0L;
+        Long sumTotalQ3 = 0L;
+        Long sumTotalQ4 = 0L;
+        Long sumTotalAll = 0L;
+        for (StatisticsPreciousData<Long> data : employeeList) {
+            NhanVienDTO nhanVienDTO = nhanVienBUS.getNhanVienById(data.getId());
             Object[] rowData = {
                     nhanVienDTO.getHoten(),
                     Controller.formatVND(data.getTotalQ1()),

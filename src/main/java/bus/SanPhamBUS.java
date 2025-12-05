@@ -23,7 +23,8 @@ public class SanPhamBUS {
     }
 
     public SanPhamDTO get(String MaSP) {
-        if (dssp == null) listSP();
+        if (dssp == null)
+            listSP();
         for (SanPhamDTO sp : dssp) {
             if (sp.getMaXe().equals(MaSP)) {
                 return sp;
@@ -33,34 +34,33 @@ public class SanPhamBUS {
     }
 
     public SanPhamDTO getSanPhamById(String MaXe) {
-        if (dssp == null) listSP();
-        for (SanPhamDTO sp : dssp) {
-            if (sp.getMaXe().equals(MaXe)) {
-                return sp;
-            }
-        }
-        return null;
+        return get(MaXe);
     }
 
     public void addSP(SanPhamDTO sp) {
-        if (dssp == null) listSP();
-        dssp.add(sp);
+        if (dssp == null)
+            listSP();
+        // Gọi DAO để thêm, DAO sẽ tự sinh mã và gán vào DTO
         new SanPhamDAO().add(sp);
+        dssp.add(sp); // Cập nhật danh sách trong BUS
     }
 
     public void deleteSP(String MaSP) {
-        if (dssp == null) listSP();
-        for (SanPhamDTO sp : dssp) {
-            if (sp.getMaXe().equals(MaSP)) {
-                dssp.remove(sp);
-                new SanPhamDAO().delete(MaSP);
+        if (dssp == null)
+            listSP();
+        for (int i = 0; i < dssp.size(); i++) {
+            if (dssp.get(i).getMaXe().equals(MaSP)) {
+                dssp.remove(i);
+                // Gọi DAO để soft delete
+                new SanPhamDAO().softDelete(MaSP);
                 return;
             }
         }
     }
 
     public void setSP(SanPhamDTO s) {
-        if (dssp == null) listSP();
+        if (dssp == null)
+            listSP();
         for (int i = 0; i < dssp.size(); i++) {
             if (dssp.get(i).getMaXe().equals(s.getMaXe())) {
                 dssp.set(i, s);
@@ -71,7 +71,8 @@ public class SanPhamBUS {
     }
 
     public boolean check(String masp) {
-        if (dssp == null) listSP();
+        if (dssp == null)
+            listSP();
         for (SanPhamDTO sp : dssp) {
             if (sp.getMaXe().equals(masp)) {
                 return true;
@@ -81,13 +82,15 @@ public class SanPhamBUS {
     }
 
     public ArrayList<SanPhamDTO> getList() {
-        if (dssp == null) listSP();
+        if (dssp == null)
+            listSP();
         return dssp;
     }
 
-    // ✅ THÊM HÀM NÀY ĐỂ CẬP NHẬT SỐ LƯỢNG TỒN KHO SAU KHI NHẬP HÀNG
+    // ✅ Cập nhật số lượng tồn kho
     public void capNhatSoLuongTon(String maXe, int soLuongThem) {
-        if (dssp == null) listSP();
+        if (dssp == null)
+            listSP();
         for (SanPhamDTO sp : dssp) {
             if (sp.getMaXe().equals(maXe)) {
                 int soLuongMoi = sp.getSoluong() + soLuongThem;

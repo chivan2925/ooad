@@ -1,27 +1,20 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dto;
 
-/**
- *
- * @author lekha
- */
-public class SanPhamDTO 
-{
-    private String MaXe,TenXe,HangXe,Anh;
-    private int giaban,soluong;
-    public SanPhamDTO(){
+public class SanPhamDTO {
+    private String MaXe, TenXe, HangXe, Anh, trangthai;
+    private int giaban, soluong;
+
+    public SanPhamDTO() {
     }
 
-    public SanPhamDTO(String MaXe, String TenXe, String HangXe, int giaban, int soluong, String Anh) {
+    public SanPhamDTO(String MaXe, String TenXe, String HangXe, int giaban, int soluong, String Anh, String trangthai) {
         this.MaXe = MaXe;
         this.TenXe = TenXe;
         this.HangXe = HangXe;
         this.Anh = Anh;
         this.giaban = giaban;
         this.soluong = soluong;
+        this.trangthai = trangthai;
     }
 
     public String getMaXe() {
@@ -71,5 +64,12 @@ public class SanPhamDTO
     public void setSoluong(int soluong) {
         this.soluong = soluong;
     }
-    
+
+    public String getTrangthai() {
+        return trangthai;
+    }
+
+    public void setTrangthai(String trangthai) {
+        this.trangthai = trangthai;
+    }
 }

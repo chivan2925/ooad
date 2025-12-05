@@ -10,6 +10,7 @@ public class KhachHangDAO {
 
     /**
      * Lấy danh sách khách hàng có TRANGTHAI = 'Hoạt động'
+     * 
      * @return ArrayList<KhachHangDTO>
      */
     public ArrayList<KhachHangDTO> list() {
@@ -21,7 +22,7 @@ public class KhachHangDAO {
         try {
             conn = Database.getConnection();
             // LỌC DỮ LIỆU: Chỉ lấy khách hàng đang Hoạt động
-            String sql = "SELECT * FROM KHACHHANG WHERE TRANGTHAI = 'Đang hoạt động'"; 
+            String sql = "SELECT * FROM KHACHHANG WHERE TRANGTHAI = 'hoạt động'";
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
 
@@ -32,7 +33,7 @@ public class KhachHangDAO {
                 String diachi = rs.getString("DIACHI");
                 String tendangnhap = rs.getString("TENDANGNHAP");
                 String matkhau = rs.getString("MATKHAU");
-                String trangthai = rs.getString("TRANGTHAI"); 
+                String trangthai = rs.getString("TRANGTHAI");
 
                 KhachHangDTO kh = new KhachHangDTO(makh, hoten, sdt, diachi, tendangnhap, matkhau, trangthai);
                 dskh.add(kh);
@@ -41,8 +42,10 @@ public class KhachHangDAO {
             Logger.getLogger(KhachHangDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
+                if (rs != null)
+                    rs.close();
+                if (stmt != null)
+                    stmt.close();
                 Database.closeConnection(conn);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -51,29 +54,30 @@ public class KhachHangDAO {
         return dskh;
     }
 
-
     /**
-     * Thêm mới một khách hàng. Tự động tạo MAKH và mặc định TRANGTHAI = 'Hoạt động'.
+     * Thêm mới một khách hàng. Tự động tạo MAKH và mặc định TRANGTHAI = 'Hoạt
+     * động'.
      * Cập nhật lại MAKH cho đối tượng DTO truyền vào.
+     * 
      * @param kh Đối tượng KhachHangDTO cần thêm.
      */
     public void add(KhachHangDTO kh) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        final String TRANGTHAI_MACDINH = "Đang hoạt động"; 
+        final String TRANGTHAI_MACDINH = "hoạt động";
 
         try {
             conn = Database.getConnection();
-            
+
             // 1. TẠO MÃ KHÁCH HÀNG TỰ ĐỘNG
             String newMakh = generateNextMaKH();
-            
+
             // 2. Cập nhật DTO với mã mới
             kh.setMakh(newMakh);
-            
+
             String sql = "INSERT INTO KHACHHANG (MAKH, HOTEN, SDT, DIACHI, TENDANGNHAP, MATKHAU, TRANGTHAI) VALUES (?, ?, ?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sql);
-            
+
             stmt.setString(1, newMakh); // Gán Mã khách hàng được tạo tự động
             stmt.setString(2, kh.getHoten());
             stmt.setString(3, kh.getSdt());
@@ -87,7 +91,8 @@ public class KhachHangDAO {
             Logger.getLogger(KhachHangDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {
             try {
-                if (stmt != null) stmt.close();
+                if (stmt != null)
+                    stmt.close();
                 Database.closeConnection(conn);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -95,14 +100,14 @@ public class KhachHangDAO {
         }
     }
 
-
     /**
      * Tạo mã khách hàng tiếp theo (ví dụ: KH001, KH002...).
-     * Logic: Đếm tổng số khách hàng hiện có trong DB (Count(*)) và tạo mã tiếp theo.
+     * Logic: Đếm tổng số khách hàng hiện có trong DB (Count(*)) và tạo mã tiếp
+     * theo.
+     * 
      * @return Mã khách hàng mới dưới dạng chuỗi (KHXXX).
      */
-    public String generateNextMaKH() 
-    {
+    public String generateNextMaKH() {
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -135,8 +140,10 @@ public class KhachHangDAO {
             newId = PREFIX + "001";
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
+                if (rs != null)
+                    rs.close();
+                if (stmt != null)
+                    stmt.close();
                 Database.closeConnection(conn);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -146,11 +153,9 @@ public class KhachHangDAO {
         return newId;
     }
 
-
-
-
     /**
      * Cập nhật thông tin khách hàng, bao gồm TRANGTHAI.
+     * 
      * @param kh Đối tượng KhachHangDTO chứa thông tin mới.
      */
     public void set(KhachHangDTO kh) {
@@ -161,13 +166,13 @@ public class KhachHangDAO {
             conn = Database.getConnection();
             String sql = "UPDATE KHACHHANG SET HOTEN=?, SDT=?, DIACHI=?, TENDANGNHAP=?, MATKHAU=?, TRANGTHAI=? WHERE MAKH=?";
             stmt = conn.prepareStatement(sql);
-            
+
             stmt.setString(1, kh.getHoten());
             stmt.setString(2, kh.getSdt());
             stmt.setString(3, kh.getDiachi());
             stmt.setString(4, kh.getTendangnhap());
             stmt.setString(5, kh.getMatkhau());
-            stmt.setString(6, kh.getTrangThai()); 
+            stmt.setString(6, kh.getTrangThai());
             stmt.setString(7, kh.getMakh());
 
             stmt.executeUpdate();
@@ -175,7 +180,8 @@ public class KhachHangDAO {
             Logger.getLogger(KhachHangDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {
             try {
-                if (stmt != null) stmt.close();
+                if (stmt != null)
+                    stmt.close();
                 Database.closeConnection(conn);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -183,9 +189,9 @@ public class KhachHangDAO {
         }
     }
 
-
     /**
      * Xóa logic (Soft Delete): Cập nhật TRANGTHAI thành "Không hoạt động".
+     * 
      * @param makh Mã khách hàng cần xóa.
      */
     public void softDelete(String makh) {
@@ -197,16 +203,17 @@ public class KhachHangDAO {
             conn = Database.getConnection();
             String sql = "UPDATE KHACHHANG SET TRANGTHAI = ? WHERE MAKH=?";
             stmt = conn.prepareStatement(sql);
-            
+
             stmt.setString(1, TRANGTHAI_MOI);
             stmt.setString(2, makh);
-            
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             Logger.getLogger(KhachHangDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {
             try {
-                if (stmt != null) stmt.close();
+                if (stmt != null)
+                    stmt.close();
                 Database.closeConnection(conn);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -214,8 +221,6 @@ public class KhachHangDAO {
         }
     }
 
-
-    
     // Hàm checkLogin và các hàm khác giữ nguyên
     public static KhachHangDTO checkLogin(String username, String password) {
         Connection conn = null;
@@ -245,15 +250,18 @@ public class KhachHangDAO {
             Logger.getLogger(KhachHangDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-                Database.closeConnection(conn); 
+                if (rs != null)
+                    rs.close();
+                if (stmt != null)
+                    stmt.close();
+                Database.closeConnection(conn);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
         return null;
     }
+
     public boolean checkUsernameExists(String username) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -273,9 +281,21 @@ public class KhachHangDAO {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try { if (rs != null) rs.close(); } catch (Exception e) {}
-            try { if (stmt != null) stmt.close(); } catch (Exception e) {}
-            try { if (conn != null) conn.close(); } catch (Exception e) {}
+            try {
+                if (rs != null)
+                    rs.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (stmt != null)
+                    stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+            }
         }
         return false;
     }

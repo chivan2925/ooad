@@ -635,91 +635,94 @@ public class SanPhamPanel extends JPanel {
 }
 
 // class PhanTrangPanel extends JPanel {
-//     private JButton btnFirst, btnPrev, btnNext, btnLast;
-//     private JLabel lblPageInfo;
-//     private SanPhamPanel sanPhamPanel;
+// private JButton btnFirst, btnPrev, btnNext, btnLast;
+// private JLabel lblPageInfo;
+// private SanPhamPanel sanPhamPanel;
 
-//     public PhanTrangPanel(SanPhamPanel sanPhamPanel) {
-//         this.sanPhamPanel = sanPhamPanel;
-//         initComponents();
-//     }
+// public PhanTrangPanel(SanPhamPanel sanPhamPanel) {
+// this.sanPhamPanel = sanPhamPanel;
+// initComponents();
+// }
 
-//     private void initComponents() {
-//         setLayout(new BorderLayout());
-//         setBorder(new EmptyBorder(16, 0, 0, 0));
-//         setBackground(sanPhamPanel.BACKGROUND_COLOR);
+// private void initComponents() {
+// setLayout(new BorderLayout());
+// setBorder(new EmptyBorder(16, 0, 0, 0));
+// setBackground(sanPhamPanel.BACKGROUND_COLOR);
 
-//         JPanel paginationPanel = new JPanel();
-//         paginationPanel.setLayout(new BoxLayout(paginationPanel, BoxLayout.X_AXIS));
-//         paginationPanel.setBackground(sanPhamPanel.BACKGROUND_COLOR);
-//         paginationPanel.setBorder(BorderFactory.createEmptyBorder(8, 0, 8, 0));
+// JPanel paginationPanel = new JPanel();
+// paginationPanel.setLayout(new BoxLayout(paginationPanel, BoxLayout.X_AXIS));
+// paginationPanel.setBackground(sanPhamPanel.BACKGROUND_COLOR);
+// paginationPanel.setBorder(BorderFactory.createEmptyBorder(8, 0, 8, 0));
 
-//         // First page button
-//         btnFirst = createPaginationButton("<<", sanPhamPanel.PRIMARY_COLOR);
-//         btnFirst.addActionListener(e -> sanPhamPanel.showPage(1));
+// // First page button
+// btnFirst = createPaginationButton("<<", sanPhamPanel.PRIMARY_COLOR);
+// btnFirst.addActionListener(e -> sanPhamPanel.showPage(1));
 
-//         // Previous page button
-//         btnPrev = createPaginationButton("<", sanPhamPanel.PRIMARY_COLOR);
-//         btnPrev.addActionListener(e -> sanPhamPanel.showPage(Math.max(1, sanPhamPanel.currentPage - 1)));
+// // Previous page button
+// btnPrev = createPaginationButton("<", sanPhamPanel.PRIMARY_COLOR);
+// btnPrev.addActionListener(e -> sanPhamPanel.showPage(Math.max(1,
+// sanPhamPanel.currentPage - 1)));
 
-//         // Page info label
-//         lblPageInfo = new JLabel("Trang 1/1");
-//         lblPageInfo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-//         lblPageInfo.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 16));
-//         lblPageInfo.setForeground(sanPhamPanel.TEXT_COLOR);
+// // Page info label
+// lblPageInfo = new JLabel("Trang 1/1");
+// lblPageInfo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+// lblPageInfo.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 16));
+// lblPageInfo.setForeground(sanPhamPanel.TEXT_COLOR);
 
-//         // Next page button
-//         btnNext = createPaginationButton(">", sanPhamPanel.PRIMARY_COLOR);
-//         btnNext.addActionListener(
-//                 e -> sanPhamPanel.showPage(Math.min(sanPhamPanel.totalPages, sanPhamPanel.currentPage + 1)));
+// // Next page button
+// btnNext = createPaginationButton(">", sanPhamPanel.PRIMARY_COLOR);
+// btnNext.addActionListener(
+// e -> sanPhamPanel.showPage(Math.min(sanPhamPanel.totalPages,
+// sanPhamPanel.currentPage + 1)));
 
-//         // Last page button
-//         btnLast = createPaginationButton(">>", sanPhamPanel.PRIMARY_COLOR);
-//         btnLast.addActionListener(e -> sanPhamPanel.showPage(sanPhamPanel.totalPages));
+// // Last page button
+// btnLast = createPaginationButton(">>", sanPhamPanel.PRIMARY_COLOR);
+// btnLast.addActionListener(e ->
+// sanPhamPanel.showPage(sanPhamPanel.totalPages));
 
-//         paginationPanel.add(Box.createHorizontalGlue());
-//         paginationPanel.add(btnFirst);
-//         paginationPanel.add(Box.createHorizontalStrut(8));
-//         paginationPanel.add(btnPrev);
-//         paginationPanel.add(lblPageInfo);
-//         paginationPanel.add(btnNext);
-//         paginationPanel.add(Box.createHorizontalStrut(8));
-//         paginationPanel.add(btnLast);
-//         paginationPanel.add(Box.createHorizontalGlue());
+// paginationPanel.add(Box.createHorizontalGlue());
+// paginationPanel.add(btnFirst);
+// paginationPanel.add(Box.createHorizontalStrut(8));
+// paginationPanel.add(btnPrev);
+// paginationPanel.add(lblPageInfo);
+// paginationPanel.add(btnNext);
+// paginationPanel.add(Box.createHorizontalStrut(8));
+// paginationPanel.add(btnLast);
+// paginationPanel.add(Box.createHorizontalGlue());
 
-//         add(paginationPanel, BorderLayout.CENTER);
-//     }
+// add(paginationPanel, BorderLayout.CENTER);
+// }
 
-//     private JButton createPaginationButton(String text, Color color) {
-//         JButton button = new JButton(text);
-//         button.setFont(new Font("Segoe UI", Font.BOLD, 14));
-//         button.setBackground(color);
-//         button.setForeground(Color.WHITE);
-//         button.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
-//         button.setFocusPainted(false);
-//         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+// private JButton createPaginationButton(String text, Color color) {
+// JButton button = new JButton(text);
+// button.setFont(new Font("Segoe UI", Font.BOLD, 14));
+// button.setBackground(color);
+// button.setForeground(Color.WHITE);
+// button.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
+// button.setFocusPainted(false);
+// button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-//         button.addMouseListener(new MouseAdapter() {
-//             @Override
-//             public void mouseEntered(MouseEvent e) {
-//                 button.setBackground(color.darker());
-//             }
+// button.addMouseListener(new MouseAdapter() {
+// @Override
+// public void mouseEntered(MouseEvent e) {
+// button.setBackground(color.darker());
+// }
 
-//             @Override
-//             public void mouseExited(MouseEvent e) {
-//                 button.setBackground(color);
-//             }
-//         });
+// @Override
+// public void mouseExited(MouseEvent e) {
+// button.setBackground(color);
+// }
+// });
 
-//         return button;
-//     }
+// return button;
+// }
 
-//     public void updatePageInfo(int currentPage, int totalPages) {
-//         lblPageInfo.setText(String.format("Trang %d/%d", currentPage, totalPages));
+// public void updatePageInfo(int currentPage, int totalPages) {
+// lblPageInfo.setText(String.format("Trang %d/%d", currentPage, totalPages));
 
-//         btnFirst.setEnabled(currentPage > 1);
-//         btnPrev.setEnabled(currentPage > 1);
-//         btnNext.setEnabled(currentPage < totalPages);
-//         btnLast.setEnabled(currentPage < totalPages);
-//     }
+// btnFirst.setEnabled(currentPage > 1);
+// btnPrev.setEnabled(currentPage > 1);
+// btnNext.setEnabled(currentPage < totalPages);
+// btnLast.setEnabled(currentPage < totalPages);
+// }
 // }

@@ -15,6 +15,7 @@ public class MainFrame extends JFrame {
     private GioHangPanel gioHangPanel;
     private ThongTinPanel thongTinPanel;
     private DoiMatKhauPanel doiMatKhauPanel;
+    private LichSuMuaHangPanel lichSuMuaHangPanel;
     CardLayout cardLayout;
 
     // Các thành phần mới cho giao diện hiện đại
@@ -51,12 +52,14 @@ public class MainFrame extends JFrame {
         gioHangPanel = GioHangPanel.getInstance(this);
         thongTinPanel = new ThongTinPanel(this);
         doiMatKhauPanel = new DoiMatKhauPanel(this);
+        lichSuMuaHangPanel = new LichSuMuaHangPanel();
 
         // Thêm các panel vào contentPanel
         contentPanel.add(sanPhamPanel, "SanPham");
         contentPanel.add(gioHangPanel, "GioHang");
         contentPanel.add(thongTinPanel, "ThongTin");
         contentPanel.add(doiMatKhauPanel, "DoiMatKhau");
+        contentPanel.add(lichSuMuaHangPanel, "LichSuMuaHang");
 
         // Tạo header
         createHeader();
@@ -134,6 +137,7 @@ public class MainFrame extends JFrame {
 
         addSectionLabel(menuPanel, "MUA SẮM");
         JButton gioHangButton = addMenuButton(menuPanel, "Giỏ hàng", "GioHang", new ImageIcon());
+        addMenuButton(menuPanel, "Lịch sử mua hàng", "LichSuMuaHang", new ImageIcon());
 
         addSectionLabel(menuPanel, "TÀI KHOẢN");
         JButton thongTinButton = addMenuButton(menuPanel, "Thông tin cá nhân", "ThongTin", new ImageIcon());

@@ -1,17 +1,19 @@
-
 package dto;
 
-public class NhanVienDTO 
-{
-    private String manv,hoten,ngaysinh,gioitinh,sdt,diachi,chucvu,tendangnhap,matkhau,quyen;
-    public NhanVienDTO(){
+public class NhanVienDTO {
+    private String manv, hoten, ngaysinh, gioitinh, sdt, diachi, chucvu, tendangnhap, matkhau, quyen;
+    private int trangthai;
+
+    public NhanVienDTO() {
     }
-public NhanVienDTO(String manv, String hoten) {
+
+    public NhanVienDTO(String manv, String hoten) {
         this.manv = manv;
         this.hoten = hoten;
     }
 
-    public NhanVienDTO(String manv, String hoten, String ngaysinh, String gioitinh, String sdt, String diachi, String chucvu, String tendangnhap, String matkhau, String quyen) {
+    public NhanVienDTO(String manv, String hoten, String ngaysinh, String gioitinh, String sdt, String diachi,
+            String chucvu, String tendangnhap, String matkhau, String quyen, int trangthai) {
         this.manv = manv;
         this.hoten = hoten;
         this.ngaysinh = ngaysinh;
@@ -22,6 +24,7 @@ public NhanVienDTO(String manv, String hoten) {
         this.tendangnhap = tendangnhap;
         this.matkhau = matkhau;
         this.quyen = quyen;
+        this.trangthai = trangthai;
     }
 
     public String getManv() {
@@ -103,5 +106,12 @@ public NhanVienDTO(String manv, String hoten) {
     public void setQuyen(String quyen) {
         this.quyen = quyen;
     }
-    
+
+    public int getTrangthai() {
+        return trangthai;
+    }
+
+    public void setTrangthai(int trangthai) {
+        this.trangthai = trangthai;
+    }
 }

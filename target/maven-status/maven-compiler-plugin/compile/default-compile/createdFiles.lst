@@ -87,7 +87,6 @@ gui\Component\Panel\Components\ItemSideBarLabel.class
 dto\Enum\PayStatus.class
 dao\Interface\IRepositoryBase.class
 gui\Component\Panel\KhachHangGUI$2.class
-gui\Component\Panel\nhanVienGUI$7.class
 gui\Login$1.class
 gui\Component\Dialog\DeleteSupplierDialog$2.class
 gui\Component\Panel\PurchaseOrderPanel$1.class
@@ -118,7 +117,6 @@ bus\Interface\ProductsBUSInterface.class
 gui\Component\Panel\Statistics\PurchaseStatistics$1.class
 dao\Interface\RowMapper.class
 gui\Customer\MainFrame$2.class
-gui\Component\Panel\nhanVienGUI$6.class
 dto\Enum\Status.class
 gui\Component\TextField\CustomTextField$1.class
 gui\Component\Panel\Statistics\Components\EmployeeTableStatistics.class
@@ -163,6 +161,7 @@ gui\Component\Combobox\CustomComboBox$1.class
 gui\Component\Panel\SanPhamPanel$3.class
 gui\Customer\ThanhToanDialog.class
 gui\Component\Panel\nhanVienGUI$5.class
+gui\Customer\LichSuMuaHangPanel$ButtonRenderer.class
 gui\Customer\GioHangPanel$2.class
 gui\Customer\ThanhToanDialog$2.class
 dao\KhachHangDAO.class
@@ -172,6 +171,7 @@ dto\Statistics\PenaltyTimeData.class
 gui\Component\Button\ButtonExportPDF$1.class
 gui\Component\Panel\Statistics\Components\CustomBookChart.class
 gui\Component\Panel\Statistics\PurchaseStatistics$8.class
+gui\Customer\LichSuMuaHangPanel.class
 gui\Customer\GioHangPanel$ButtonEditor$1.class
 gui\Component\Panel\KhachHangGUI$5.class
 gui\Customer\ThanhToanDialog$1.class
@@ -249,6 +249,7 @@ gui\Component\Panel\Components\SidebarListener.class
 gui\Component\Button\ButtonBack.class
 gui\Component\Button\ButtonRefresh.class
 gui\Component\Panel\Components\AccountNameLabel.class
+gui\Customer\LichSuMuaHangPanel$3.class
 gui\Customer\ThanhToanDialog$PaymentMethodRenderer.class
 gui\Customer\ProductDetailDialog$1.class
 gui\Customer\PhanTrangPanel$2.class
@@ -268,6 +269,7 @@ gui\Component\Panel\SupplierPanel$3.class
 gui\Customer\DoiMatKhauPanel.class
 gui\Component\Table\PurchaseOrderTable.class
 gui\Component\Dialog\AddPurchaseOrderDialog$2.class
+gui\Customer\LichSuMuaHangPanel$4.class
 gui\Component\TextField\CustomTextField$RoundBorder.class
 gui\Orders.class
 gui\Component\TextField\RoundedTextField.class
@@ -302,6 +304,7 @@ bus\ProductsBUS.class
 gui\Component\Button\ButtonDelete$RoundedBorder.class
 dto\Enum\Gender.class
 dao\Database.class
+gui\Customer\LichSuMuaHangPanel$2.class
 gui\Component\Dialog\ChooseSupplierDialog$2.class
 gui\Component\Button\ButtonFilter$1.class
 gui\Component\Panel\Statistics\Components\DataRefreshListener.class
@@ -310,6 +313,7 @@ gui\Component\Panel\Statistics\Components\PurchaseYearStatisticsTable.class
 gui\Component\Panel\SanPhamPanel.class
 gui\OrdersFilterPanel$1.class
 gui\Component\Dialog\ChooseSupplierDialog$1.class
+gui\Customer\LichSuMuaHangPanel$1.class
 gui\Component\Dialog\AddSupplierDialog$2.class
 dao\Interface\DetailInvoicesDAOInterface.class
 gui\Component\Button\ButtonRefresh$1.class

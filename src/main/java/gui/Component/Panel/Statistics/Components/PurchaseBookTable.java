@@ -12,32 +12,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PurchaseBookTable extends JTableCustom {
-    private final static String[] tblHeader = {"Sách", "Quý 1", "Quý 2", "Quý 3", "Quý 4", "Tổng cộng"};
+    private final static String[] tblHeader = { "Sách", "Quý 1", "Quý 2", "Quý 3", "Quý 4", "Tổng cộng" };
     private DefaultTableModel tableModel;
     private List<StatisticsPreciousData<Long>> bookList;
     private SanPhamBUS bookBUS;
 
-    public PurchaseBookTable(){
-        super(new DefaultTableModel(tblHeader,0));
+    public PurchaseBookTable() {
+        super(new DefaultTableModel(tblHeader, 0));
         this.tableModel = (DefaultTableModel) getModel();
         bookBUS = new SanPhamBUS();
         bookList = new ArrayList<>();
         setAutoCreateRowSorter(true);
     }
 
-    public void setList(List<StatisticsPreciousData<Long>> list){
+    public void setList(List<StatisticsPreciousData<Long>> list) {
         bookList = list;
     }
 
-    public void renderPurchaseFeeTable(){
-        if(bookList == null) return;
+    public void renderPurchaseFeeTable() {
+        if (bookList == null)
+            return;
 
         tableModel.setRowCount(0);
-        Long sumTotalQ1 = 0L; Long sumTotalQ2 = 0L; Long sumTotalQ3 = 0L; Long sumTotalQ4 = 0L; Long sumTotalAll = 0L;
-        for(StatisticsPreciousData<Long> data : bookList){
+        Long sumTotalQ1 = 0L;
+        Long sumTotalQ2 = 0L;
+        Long sumTotalQ3 = 0L;
+        Long sumTotalQ4 = 0L;
+        Long sumTotalAll = 0L;
+        for (StatisticsPreciousData<Long> data : bookList) {
             SanPhamDTO book = bookBUS.getSanPhamById(data.getId());
+            String ten = book != null ? book.getTenXe() : "Không xác định";
             Object[] rowData = {
-                    book.getTenXe(),
+                    ten,
                     Controller.formatVND(data.getTotalQ1()),
                     Controller.formatVND(data.getTotalQ2()),
                     Controller.formatVND(data.getTotalQ3()),
@@ -65,15 +71,21 @@ public class PurchaseBookTable extends JTableCustom {
 
     }
 
-    public void renderPurchaseQuantiyTable(){
-        if(bookList == null) return;
+    public void renderPurchaseQuantiyTable() {
+        if (bookList == null)
+            return;
         tableModel.setRowCount(0);
 
-        Long sumCountQ1 = 0L; Long sumCountQ2 = 0L; Long sumCountQ3 = 0L; Long sumCountQ4 = 0L; Long sumCountAll = 0L;
-        for(StatisticsPreciousData<Long> data : bookList){
+        Long sumCountQ1 = 0L;
+        Long sumCountQ2 = 0L;
+        Long sumCountQ3 = 0L;
+        Long sumCountQ4 = 0L;
+        Long sumCountAll = 0L;
+        for (StatisticsPreciousData<Long> data : bookList) {
             SanPhamDTO book = bookBUS.getSanPhamById(data.getId());
+            String ten = book != null ? book.getTenXe() : "Không xác định";
             Object[] rowData = {
-                    book.getTenXe(),
+                    ten,
                     data.getCountQ1(),
                     data.getCountQ2(),
                     data.getCountQ3(),
@@ -92,8 +104,5 @@ public class PurchaseBookTable extends JTableCustom {
         };
         tableModel.addRow(totalRow);
     }
-
-
-
 
 }
