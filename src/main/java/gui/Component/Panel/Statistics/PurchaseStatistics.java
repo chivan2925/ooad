@@ -95,15 +95,15 @@ public class PurchaseStatistics extends javax.swing.JPanel {
         EventBusManager.getEventBus().register(this);
     }
 
-    // @Subscribe
-    // public void onPurchaseChanged(PurchaseChangeEvent event) {
-    //     reloadYears();
-    //     renderBox();
-    //     loadPreciousData();
-    //     renderPreciousPanel();
-    //     initDatePanel();
-    //     initYearPanel();
-    // }
+    @Subscribe
+    public void onPurchaseChanged(PurchaseChangeEvent event) {
+        reloadYears();
+        renderBox();
+        loadPreciousData();
+        renderPreciousPanel();
+        initDatePanel();
+        initYearPanel();
+    }
 
     public void renderPreciousPanel() {
         // Kiểm tra nếu combobox không có item

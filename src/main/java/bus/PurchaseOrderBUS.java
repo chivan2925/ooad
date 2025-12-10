@@ -5,6 +5,8 @@ import dao.PurchaseOrderDetailDAO;
 import dao.Interface.IRepositoryBase;
 import dto.PurchaseOrderDTO;
 import dto.PurchaseOrderDetailDTO;
+import gui.Component.Panel.Statistics.Components.EventBusManager;
+import gui.Component.Panel.Statistics.Components.PurchaseChangeEvent;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -59,6 +61,7 @@ public class PurchaseOrderBUS {
             if (newOrderId != null && newOrderId > 0) {
                 order.setMaPN(newOrderId);
                 purchaseOrderList.add(order);
+                EventBusManager.getEventBus().post(new PurchaseChangeEvent());
                 return true;
             }
             return false;

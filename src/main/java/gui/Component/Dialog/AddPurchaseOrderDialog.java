@@ -73,6 +73,7 @@ public class AddPurchaseOrderDialog extends JDialog {
     private PurchaseOrderPanel purchaseOrderPanel;
     private List<PurchaseOrderDetailDTO> pendingOrderDetails = new ArrayList<>();
     private Long currentPurchaseId;
+    private boolean addedSuccessfully = false;
 
     public AddPurchaseOrderDialog(JFrame parent, PurchaseOrderPanel purchaseOrderPanel) {
         super(parent, "Thêm Phiếu Nhập", true);
@@ -480,13 +481,6 @@ private void setCurrentID() {
         newOrder.setStatus(status);
 
         boolean success = purchaseOrderBUS.addPurchaseOrder(newOrder);
-        if (currentEmployee == null || currentSupplier == null) {
-        JOptionPane.showMessageDialog(this,
-            "Vui lòng chọn đầy đủ nhân viên và nhà cung cấp",
-            "Lỗi",
-            JOptionPane.ERROR_MESSAGE);
-        return;
-    }
 
         if (success) {
             // Thêm chi tiết phiếu nhập
@@ -497,12 +491,7 @@ private void setCurrentID() {
 
 
             JOptionPane.showMessageDialog(this, "Thêm phiếu nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-
-            // Cập nhật lại bảng hiển thị
-            if (purchaseOrderPanel != null) {
-                purchaseOrderPanel.refreshData(); 
-            }
-            repaint();
+            addedSuccessfully = true;
             dispose(); // Đóng dialog sau khi thêm xong
         } else {
             JOptionPane.showMessageDialog(this, "Thêm phiếu nhập thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -512,5 +501,9 @@ private void setCurrentID() {
         ex.printStackTrace();
     }
 }
+
+    public boolean isAddedSuccessfully() {
+        return addedSuccessfully;
+    }
 }
 

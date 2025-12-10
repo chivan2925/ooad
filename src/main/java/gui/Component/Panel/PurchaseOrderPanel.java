@@ -283,6 +283,7 @@ public class PurchaseOrderPanel extends javax.swing.JPanel {
     }
     public void refreshData() {
     // 1. Lấy dữ liệu mới từ BUS
+    purchaseOrderBUS.loadPurchaseOrders();
     List<PurchaseOrderDTO> danhSachPhieuNhap = purchaseOrderBUS.getAllPurchaseOrders();
     
     // 2. Cập nhật dữ liệu vào purchaseOrderTable
@@ -308,6 +309,9 @@ public class PurchaseOrderPanel extends javax.swing.JPanel {
             public void mouseClicked(MouseEvent e) {
                 AddPurchaseOrderDialog addDialog = new AddPurchaseOrderDialog(parentFrame, PurchaseOrderPanel.this);
                 addDialog.setVisible(true);
+                if (addDialog.isAddedSuccessfully()) {
+                    refreshData();
+                }
             }
         });
 

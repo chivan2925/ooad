@@ -19,10 +19,10 @@ public class AddPurchaseOrderDetailsDialog extends JDialog {
     private final SanPhamBUS sanPhamBUS = new SanPhamBUS(0);
     private PurchaseOrderDetailDTO currentOrderDetail;
 
-    private final CustomTextField bookIDField = new CustomTextField();
+    private final CustomTextField productIDField = new CustomTextField();
     private final CustomTextField quantityField = new CustomTextField();
     private final CustomTextField unitPriceField = new CustomTextField();
-    private final ButtonChosen buttonChosenBook = new ButtonChosen();
+    private final ButtonChosen buttonChosenProduct = new ButtonChosen();
 
     private final JLabel titleLabel = new JLabel("Tên xe:             ");
     private final JLabel categoryLabel = new JLabel("Hãng xe:             ");
@@ -83,18 +83,18 @@ public class AddPurchaseOrderDetailsDialog extends JDialog {
         gbc.gridy = 0;
         panel.add(new JLabel("Mã xe:"), gbc);
 
-        bookIDField.setPreferredSize(new Dimension(120, 30));
-        bookIDField.getDocument().addDocumentListener(new DocumentListener() {
+        productIDField.setPreferredSize(new Dimension(120, 30));
+        productIDField.getDocument().addDocumentListener(new DocumentListener() {
             @Override public void insertUpdate(DocumentEvent e) { updateProductInfo(); }
             @Override public void removeUpdate(DocumentEvent e) { updateProductInfo(); }
             @Override public void changedUpdate(DocumentEvent e) { updateProductInfo(); }
         });
         gbc.gridx = 1;
-        panel.add(bookIDField, gbc);
+        panel.add(productIDField, gbc);
 
-        // buttonChosenBook.addActionListener(e -> chooseProduct());
+        buttonChosenProduct.addActionListener(e -> chooseProduct());
         gbc.gridx = 2;
-        panel.add(buttonChosenBook, gbc);
+        panel.add(buttonChosenProduct, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -152,7 +152,7 @@ public class AddPurchaseOrderDetailsDialog extends JDialog {
     }
 
     private void updateProductInfo() {
-        String maXe = bookIDField.getText().trim();
+        String maXe = productIDField.getText().trim();
         if (maXe.isEmpty()) {
             clearProductInfo();
             return;
@@ -186,17 +186,15 @@ public class AddPurchaseOrderDetailsDialog extends JDialog {
         }
     }
 
-    // private void chooseProduct() {
-    //     ChooseBookDialog dialog = new ChooseBookDialog(this);
-    //     dialog.setVisible(true);
-    //     SanPhamDTO selectedProduct = dialog.getSelectedProduct(); // Bạn cần cập nhật ChooseBookDialog trả về SanPhamDTO
-    //     if (selectedProduct != null) {
-    //         bookIDField.setText(selectedProduct.getMaXe());
-    //         titleLabel.setText("Tên xe: " + selectedProduct.getTenXe());
-    //         categoryLabel.setText("Hãng xe: " + selectedProduct.getHangXe());
-    //         yearLabel.setText("Giá bán: " + selectedProduct.getGiaban());
-    //     }
-    // }
+    private void chooseProduct() {
+        ChooseProductDialog dialog = new ChooseProductDialog(this);
+        dialog.setVisible(true);
+        SanPhamDTO selectedProduct = dialog.getSelectedProduct(); 
+        if (selectedProduct != null) {
+            productIDField.setText(selectedProduct.getMaXe());
+            updateProductInfo();
+        }
+    }
 
     private JSeparator createSeparator() {
         JSeparator separator = new JSeparator();
@@ -225,7 +223,7 @@ public class AddPurchaseOrderDetailsDialog extends JDialog {
     }
 
     private boolean isValidInput() {
-        if (bookIDField.getText().trim().isEmpty()) {
+        if (productIDField.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập mã xe!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return false;
         }
@@ -259,7 +257,7 @@ public class AddPurchaseOrderDetailsDialog extends JDialog {
 
     private void addPurchaseOrderDetails() {
         if (isValidInput()) {
-            String maXe = bookIDField.getText().trim();
+            String maXe = productIDField.getText().trim();
             int quantity = Integer.parseInt(quantityField.getText());
             int unitPrice = Integer.parseInt(unitPriceField.getText());
             int subTotal = quantity * unitPrice;   

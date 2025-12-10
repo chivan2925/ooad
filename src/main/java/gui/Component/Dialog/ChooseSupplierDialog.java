@@ -41,17 +41,26 @@ public class ChooseSupplierDialog extends JDialog {
         JScrollPane scrollPane = new JScrollPane(supplierTable);
         add(scrollPane, BorderLayout.CENTER);
         ((JComponent) getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        supplierTable.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (evt.getClickCount() == 2 || evt.getClickCount() == 3) {
-                    int selectedRow = supplierTable.getSelectedRow();
-                    if (selectedRow != -1) {
-                        selectedSupplier = supplierTable.getSelectedSupplier();
-                        dispose();
-                    }
-                }
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton chooseButton = new JButton("Chọn");
+        chooseButton.addActionListener(e -> {
+            int selectedRow = supplierTable.getSelectedRow();
+            if (selectedRow != -1) {
+                selectedSupplier = supplierTable.getSelectedSupplier();
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhà cung cấp.", "Thông báo", JOptionPane.WARNING_MESSAGE);
             }
         });
+        buttonPanel.add(chooseButton);
+
+        JButton cancelButton = new JButton("Hủy");
+        cancelButton.addActionListener(e -> dispose());
+        buttonPanel.add(cancelButton);
+
+        add(buttonPanel, BorderLayout.SOUTH);
+
         loadData();
     }
 

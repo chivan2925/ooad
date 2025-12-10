@@ -34,7 +34,7 @@ public class ChooseEmployeeDialog extends JDialog {
 
     public ChooseEmployeeDialog(JDialog parent) {
         super(parent, "Chọn nhân viên", true);
-        setSize(1000, 800);
+        setSize(800, 600);
         sorter = new TableRowSorter<>(employeeTable.getModel());
         employeeTable.setRowSorter(sorter);
         setLocationRelativeTo(parent);
@@ -46,26 +46,33 @@ public class ChooseEmployeeDialog extends JDialog {
         add(getSearchNavBarLabel(), BorderLayout.NORTH);
         add(employeeTable.getScrollPane(), BorderLayout.CENTER);
 
-        ((JComponent) getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
-        employeeTable.getTable().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (evt.getClickCount() == 2) { // Chỉ xử lý double-click
-                    NhanVienDTO selected = employeeTable.getSelectedNhanVien();
-                    if (selected != null) {
-                        selectedEmployee = selected;
-                        System.out.println("Selected employee: " + selected.getManv() + " - " + selected.getHoten());
-                        dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(ChooseEmployeeDialog.this,
-                            "Không thể lấy thông tin nhân viên",
-                            "Lỗi",
-                            JOptionPane.ERROR_MESSAGE);
-                    }
-                }
+        // Create a panel for the buttons
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton selectButton = new JButton("Chọn");
+        JButton cancelButton = new JButton("Hủy");
+
+        selectButton.addActionListener(e -> {
+            NhanVienDTO selected = employeeTable.getSelectedNhanVien();
+            if (selected != null) {
+                selectedEmployee = selected;
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(ChooseEmployeeDialog.this,
+                    "Vui lòng chọn một nhân viên.",
+                    "Chưa chọn nhân viên",
+                    JOptionPane.WARNING_MESSAGE);
             }
         });
+
+        cancelButton.addActionListener(e -> dispose());
+
+        buttonPanel.add(selectButton);
+        buttonPanel.add(cancelButton);
+
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        ((JComponent) getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
         loadData();
     }
 
@@ -74,35 +81,18 @@ public class ChooseEmployeeDialog extends JDialog {
     }
 
     private void loadData() {
-    List<NhanVienDTO> allEmployees = employeeBUS.getList();
-    if (allEmployees != null && !allEmployees.isEmpty()) {
-        // Lọc chỉ giữ lại nhân viên có quyền admin hoặc nhanvienkho
-        List<NhanVienDTO> filteredEmployees = new ArrayList<>();
-        for (NhanVienDTO nv : allEmployees) {
-            if ("admin".equalsIgnoreCase(nv.getQuyen()) || 
-                "nhanvienkho".equalsIgnoreCase(nv.getQuyen())) {
-                filteredEmployees.add(nv);
-            }
-        }
-        
-        if (!filteredEmployees.isEmpty()) {
-            employeeTable.setEmployees(filteredEmployees);
-            this.nhanVienList = filteredEmployees;
+        List<NhanVienDTO> allEmployees = employeeBUS.getList();
+        if (allEmployees != null && !allEmployees.isEmpty()) {
+            employeeTable.setEmployees(allEmployees);
+            this.nhanVienList = allEmployees;
         } else {
             JOptionPane.showMessageDialog(this, 
-                "Không có nhân viên kho hoặc admin nào", 
+                "Không có dữ liệu nhân viên", 
                 "Thông báo", 
                 JOptionPane.WARNING_MESSAGE);
             dispose();
         }
-    } else {
-        JOptionPane.showMessageDialog(this, 
-            "Không có dữ liệu nhân viên", 
-            "Thông báo", 
-            JOptionPane.WARNING_MESSAGE);
-        dispose();
     }
-}
     public JPanel getSearchNavBarLabel() {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -159,53 +149,7 @@ public class ChooseEmployeeDialog extends JDialog {
         topPanel.add(searchfield);
         topPanel.add(buttonRefresh);
 
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 0));
-        bottomPanel.setBackground(Color.WHITE);
-        bottomPanel.setBorder(BorderFactory.createEmptyBorder(0, 80, 0, 0));
-
-        ActionListener radioListener = e -> {
-            if (e.getSource() == allRadioButton) {
-                maleRadioButton.setSelected(false);
-                femaleRadioButton.setSelected(false);
-            } else {
-                allRadioButton.setSelected(false);
-            }
-            performSearch();
-        };
-        allRadioButton = new JRadioButton("Tất cả");
-        maleRadioButton = new JRadioButton("Nam");
-        femaleRadioButton = new JRadioButton("Nữ");
-
-        allRadioButton.setBackground(Color.WHITE);
-        maleRadioButton.setBackground(Color.WHITE);
-        femaleRadioButton.setBackground(Color.WHITE);
-        allRadioButton.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        maleRadioButton.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        femaleRadioButton.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        maleRadioButton.addActionListener(radioListener);
-        femaleRadioButton.addActionListener(radioListener);
-        allRadioButton.addActionListener(radioListener);
-
-        JLabel genderLabel = new JLabel("Giới tính:");
-        genderLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-
-        JPanel emptyPanel = new JPanel();
-        emptyPanel.setPreferredSize(new Dimension(30, 0));
-
-        buttonGroup = new ButtonGroup();
-        buttonGroup.add(maleRadioButton);
-        buttonGroup.add(femaleRadioButton);
-        buttonGroup.add(allRadioButton);
-        allRadioButton.setSelected(true);
-
-        bottomPanel.add(emptyPanel);
-        bottomPanel.add(genderLabel);
-        bottomPanel.add(allRadioButton);
-        bottomPanel.add(maleRadioButton);
-        bottomPanel.add(femaleRadioButton);
-
         mainPanel.add(topPanel);
-        mainPanel.add(bottomPanel);
 
         return mainPanel;
     }
@@ -216,27 +160,11 @@ public class ChooseEmployeeDialog extends JDialog {
             if (searchColumn == 3) searchColumn = 7; // Ánh xạ cột địa chỉ
             if (searchColumn == 2) searchColumn = 6; // Ánh xạ cột SĐT
 
-            List<RowFilter<Object, Object>> filters = new ArrayList<>();
-
-            // Bộ lọc tìm kiếm
             if (!searchText.isEmpty()) {
-                filters.add(RowFilter.regexFilter("(?i)" + searchText, searchColumn));
-            }
-
-            // Bộ lọc giới tính
-            if (!allRadioButton.isSelected()) {
-                if (maleRadioButton.isSelected() || femaleRadioButton.isSelected()) {
-                    Gender genderFilter = maleRadioButton.isSelected() ? Gender.Nam : Gender.Nữ;
-                    filters.add(RowFilter.regexFilter(genderFilter.toString(), 3)); // Cột giới tính
-                }
-            }
-
-            // Không cần thêm bộ lọc quyền vì đã lọc từ loadData()
-            
-            if (filters.isEmpty()) {
-                sorter.setRowFilter(null);
+                RowFilter<Object, Object> filter = RowFilter.regexFilter("(?i)" + searchText, searchColumn);
+                sorter.setRowFilter(filter);
             } else {
-                sorter.setRowFilter(RowFilter.andFilter(filters));
+                sorter.setRowFilter(null);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -248,11 +176,9 @@ public class ChooseEmployeeDialog extends JDialog {
     }
     
     public void refreshData() {
-        loadData(); // Sử dụng lại phương thức loadData đã sửa
+        loadData();
         sorter.setRowFilter(null);
         searchfield.setText("");
-        buttonGroup.clearSelection();
-        allRadioButton.setSelected(true);
     }
 
 }
